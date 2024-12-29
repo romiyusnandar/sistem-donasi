@@ -28,6 +28,6 @@ class DataUser extends Controller
       UserModel::where('id', $request->id)->delete();
       Session::flash('success', 'Data berhasil dihapus');
 
-      return redirect('/data_user');
+      return redirect('/datauser');
     }
 }
