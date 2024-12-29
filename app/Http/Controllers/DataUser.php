@@ -14,15 +14,46 @@ class DataUser extends Controller
       return view('data_user.index', ['users' => $data]);
     }
 
-    function create()
+    public function edit($id)
     {
-      return view('data_user.create');
+        $user = UserModel::find($id);
+        if (!$user) {
+            return redirect()->route('datauser')->withErrors(['User tidak ditemukan.']);
+        }
+
+        return view('data_user.edit', ['user' => $user]);
     }
-    function edit($id)
+
+    // Memproses pembaruan data user
+    public function update(Request $request, $id)
     {
-      $data = UserModel::find($id);
-      return view('data_user.edit', ['user' => $data]);
+        $request->validate([
+            'fullname' => 'required|string|max:255',
+            'role' => 'required|in:user,admin',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $user = UserModel::find($id);
+        if (!$user) {
+            return redirect()->route('datauser')->withErrors(['User tidak ditemukan.']);
+        }
+
+        $user->fullname = $request->input('fullname');
+        $user->role = $request->input('role');
+
+        // Proses upload gambar jika ada
+        if ($request->hasFile('gambar')) {
+            $file = $request->file('gambar');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('picture/accounts'), $filename);
+            $user->gambar = $filename;
+        }
+
+        $user->save();
+
+        return redirect()->route('datauser')->with('success', 'Data user berhasil diperbarui.');
     }
+
     function delete(Request $request)
     {
       UserModel::where('id', $request->id)->delete();

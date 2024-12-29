@@ -67,6 +67,17 @@
       <div class="card shadow mb-4">
           <div class="card-body">
               <div class="table-responsive">
+                @if (Session::has('success'))
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire(
+                                'Sukses',
+                                '{{ Session::get('success') }}',
+                                'success'
+                            );
+                        });
+                    </script>
+                @endif
                   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                       <thead>
                           <tr>
@@ -86,7 +97,7 @@
                               <td>{{$item->email}}</td>
                               <td>{{$item->role}}</td>
                               <td>{{$item->updated_at}}</td>
-                              <td><a href="/datauser/edit/{{$item->id}}" class="btn btn-sm btn-warning text-decoration-none">Edit</a> |
+                              <td><a href="/datauser/update/{{$item->id}}" class="btn btn-sm btn-warning text-decoration-none">Edit</a>
                                 <form action="/datauser/delete/{{$item->id}}" method="POST" class="d-inline" onsubmit="return confirmHapus(event)">
                                   @csrf
                                   <button class="btn btn-sm btn-danger" type="submit">Hapus</button>

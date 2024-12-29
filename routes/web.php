@@ -28,9 +28,10 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/admin', [AdminController::class, 'index'])->name('admin')->middleware('userAkses:admin');
 
     Route::get('/datauser', [DataUser::class, 'index'])->name('datauser');
-    Route::get('/datauser/create', [DataUser::class, 'createForm'])->name('datauser.create');
-    Route::get('/datauser/edit/{id}', [DataUser::class, 'edit']);
-    Route::post('/datauser/delete/{id}', [DataUser::class, 'delete']);
+    Route::get('/datauser/update/{id}', [DataUser::class, 'edit'])->name('datauser.edit');
+    Route::post('/datauser/update/{id}', [DataUser::class, 'update'])->name('update.submit');
+    Route::post('/datauser/delete/{id}', [DataUser::class, 'delete'])->name('datauser.delete');
+
 
     Route::get('/datacampaign', [DataCampaign::class, 'index'])->name('datacampaign');
 });
