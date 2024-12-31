@@ -23,4 +23,10 @@ class DonationModel extends Model
     {
       return $this->belongsTo(CampaignModel::class, 'campaign_id', 'id');
     }
+
+    function user()
+    {
+        return $this->belongsTo(UserModel::class, 'user_id', 'id');
+    }
+
 }
