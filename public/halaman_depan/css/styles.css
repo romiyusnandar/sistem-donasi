@@ -67,7 +67,6 @@ nav ul li a {
 
 /* Buttons */
 .btn {
-  width: 100%;
   display: inline-block;
   text-align: center;
   padding: 0.8rem 1.5rem;
@@ -178,6 +177,7 @@ nav ul li a {
   padding: 0 1rem;
   margin-bottom: 1rem;
   flex-grow: 1;
+  text-align: justify;
 }
 
 .card-footer {
@@ -185,6 +185,16 @@ nav ul li a {
   margin-top: auto;
 }
 
+.card .btn {
+  width: 100%;
+  display: inline-block;
+  text-align: center;
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
 
 .progress {
   background-color: #ecf0f1;
