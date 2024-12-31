@@ -19,7 +19,7 @@
     </div>
 
     <!-- Nav Item - Data user -->
-    <li class="nav-item active">
+    <li class="nav-item">
         <a class="nav-link" href="{{route('datauser')}}"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-user fa-cog"></i>
@@ -28,7 +28,7 @@
     </li>
 
     <!-- Nav Item - Data campaign -->
-    <li class="nav-item">
+    <li class="nav-item active">
         <a class="nav-link" href="{{route('datacampaign')}}">
             <i class="fas fa-map-marked-alt"></i>
             <span>Data Kampanye</span>
@@ -37,6 +37,7 @@
 
     <!-- Divider -->
     <hr class="sidebar-divider">
+
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
@@ -48,7 +49,13 @@
     <div class="container-fluid">
 
       <!-- Page Heading -->
-      <h1 class="h3 mb-2 text-gray-800">Data User</h1>
+      <h1 class="h3 mb-2 text-gray-800">Data Kampanye</h1>
+
+      <div class="mb-3">
+        <a href="{{route('datacampaign.create')}}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Tambah Campaign
+        </a>
+    </div>
 
       <!-- DataTales -->
       <div class="card shadow mb-4">
@@ -69,23 +76,29 @@
                       <thead>
                           <tr>
                               <th>Id</th>
-                              <th>Name</th>
-                              <th>Email</th>
-                              <th>Role</th>
-                              <th>Updated</th>
+                              <th>Image</th>
+                              <th>Title</th>
+                              <th>Description</th>
+                              <th>Target</th>
+                              <th>Collected</th>
+                              <th>Status</th>
                               <th>Action</th>
                           </tr>
                       </thead>
                       <tbody>
-                        @foreach ($users as $item)
+                        @foreach ($campaigns as $item)
                             <tr>
                               <td>{{$item->id}}</td>
-                              <td>{{$item->fullname}}</td>
-                              <td>{{$item->email}}</td>
-                              <td>{{$item->role}}</td>
-                              <td>{{$item->updated_at}}</td>
-                              <td><a href="/datauser/update/{{$item->id}}" class="btn btn-sm btn-warning text-decoration-none">Edit</a>
-                                <form action="/datauser/delete/{{$item->id}}" method="POST" class="d-inline" onsubmit="return confirmHapus(event)">
+                              <td>
+                                <img src="{{ asset('picture/campaign/' . $item->image) }}" alt="Campaign Image" width="100">
+                              </td>
+                              <td>{{$item->title}}</td>
+                              <td>{{$item->description}}</td>
+                              <td>{{$item->target_amount}}</td>
+                              <td>{{$item->collected_amount}}</td>
+                              <td>{{$item->status}}</td>
+                              <td><a href="/datacampaign/update/{{$item->id}}" class="btn btn-sm btn-warning text-decoration-none">Edit</a>
+                                <form action="/datacampaign/delete/{{$item->id}}" method="POST" class="d-inline" onsubmit="return confirmHapus(event)">
                                   @csrf
                                   <button class="btn btn-sm btn-danger" type="submit">Hapus</button>
                                 </form>

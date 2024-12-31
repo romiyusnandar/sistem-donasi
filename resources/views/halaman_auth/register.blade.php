@@ -34,7 +34,7 @@
 			<div class="wrap-login100">
 				<form action="{{route('register.submit')}}" class="login100-form validate-form" method="POST" enctype="multipart/form-data">
           @csrf
-					<span class="login100-form-title p-b-43">
+					<span class="login100-form-title p-b-20">
 						Resgistrasi
 					</span>
 
