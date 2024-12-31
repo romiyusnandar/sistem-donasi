@@ -50,33 +50,37 @@
     </section>
 
     <!-- Campaign Cards -->
-    <section id="campaigns" class="campaigns">
+      <section id="campaigns" class="campaigns">
         <div class="container">
             <h2>Kampanye Terbaru</h2>
             <div class="card-container">
-                <div class="card">
-                    <img src="https://www.dompetdhuafa.org/wp-content/uploads/2022/04/WhatsApp-Image-2022-04-26-at-11.48.18-AM-768x768.jpeg" alt="Kampanye Pendidikan Anak">
-                    <h3>Pendidikan untuk Anak Pedalaman</h3>
-                    <p>Bantu anak-anak di pedalaman untuk mendapatkan akses pendidikan yang layak.</p>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 50%;"></div>
+                @foreach ($campaigns as $campaign)
+                    <div class="card">
+                        <img src="{{ asset('picture/campaign/' . $campaign->image) }}" alt="{{ $campaign->title }}">
+                        <div class="card-content">
+                          <h3>{{ $campaign->title }}</h3>
+                          <p>{{ $campaign->description }}</p>
+                        </div>
+
+                        <div class="card-footer">
+                          <div class="progress">
+                              @php
+                                  $progress = ($campaign->collected_amount / $campaign->target_amount) * 100;
+                              @endphp
+                              <div class="progress-bar" style="width: {{ $progress }}%;"></div>
+                          </div>
+                          <p class="donation-info">
+                              Rp {{ number_format($campaign->collected_amount, 0, ',', '.') }} /
+                              Rp {{ number_format($campaign->target_amount, 0, ',', '.') }}
+                          </p>
+                          <a href="/home/campaign/{{$campaign->id}}" class="btn btn-primary">Donasi Sekarang</a>
+                        </div>
                     </div>
-                    <p class="donation-info">Rp50.000.000 / Rp100.000.000</p>
-                    <a href="#" class="btn btn-primary">Donasi Sekarang</a>
-                </div>
-                <div class="card">
-                    <img src="https://digital-api.dompetdhuafa.org/storage/114439/conversions/cf2ce08c7a0b6cc1b9227e7284f0d163-large.png" alt="Kampanye Bantuan Medis">
-                    <h3>Bantuan Medis untuk Lansia</h3>
-                    <p>Berikan bantuan medis kepada lansia yang membutuhkan perawatan kesehatan.</p>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 75%;"></div>
-                    </div>
-                    <p class="donation-info">Rp75.000.000 / Rp100.000.000</p>
-                    <a href="#" class="btn btn-primary">Donasi Sekarang</a>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
+
 
     <!-- About Us Section -->
     <section id="about" class="about">
