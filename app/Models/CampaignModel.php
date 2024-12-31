@@ -18,4 +18,9 @@ class CampaignModel extends Model
       'status',
       'created_by'
   ];
+
+  function donations()
+  {
+    return $this->hasMany(DonationModel::class, 'campaign_id', 'id');
+  }
 }

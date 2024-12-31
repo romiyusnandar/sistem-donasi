@@ -95,7 +95,7 @@
                               <td>{{$item->title}}</td>
                               <td>{{$item->description}}</td>
                               <td>{{$item->target_amount}}</td>
-                              <td>{{$item->collected_amount}}</td>
+                              <td>{{ $item->collected_amount }}</td>
                               <td>{{$item->status}}</td>
                               <td><a href="/datacampaign/update/{{$item->id}}" class="btn btn-sm btn-warning text-decoration-none">Edit</a>
                                 <form action="/datacampaign/delete/{{$item->id}}" method="POST" class="d-inline" onsubmit="return confirmHapus(event)">

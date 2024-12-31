@@ -84,12 +84,6 @@
             </div>
 
             <div class="form-group">
-                <label for="collected_amount">Jumlah Donasi Terkumpul (Rp)</label>
-                <input type="number" class="form-control" id="collected_amount" placeholder="0"
-                    name="collected_amount" value="{{ old('collected_amount', $campaign->collected_amount) }}" required>
-            </div>
-
-            <div class="form-group">
                 <label for="status">Status Campaign</label>
                 <select class="form-control" id="status" name="status" required>
                     <option value="active" {{ old('status', $campaign->status) == 'active' ? 'selected' : '' }}>Aktif</option>
