@@ -14,7 +14,10 @@ class AdminController extends Controller
 
     $totalUser = UserModel::count();
     $totalCampaign = CampaignModel::count();
-    $recentDonations = DonationModel::with(['campaign', 'user'])->latest()->take(5)->get();
+    $recentDonations = DonationModel::with(['campaign', 'user'])
+        ->orderBy('created_at', 'DESC')
+        ->take(5)
+        ->get();
 
     return view('pointakses/admin/index', [
       'totalUser' => $totalUser,
