@@ -1,46 +1,71 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Detail Donasi</div>
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Detail Donasi</h4>
+                </div>
 
                 <div class="card-body">
-                    <div class="mb-3">
-                        <h5>Campaign</h5>
-                        <p>{{ $donation->campaign->title }}</p>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 class="text-muted">Kampanye</h5>
+                            <p class="lead">{{ $donation->campaign->title }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-muted">Jumlah Donasi</h5>
+                            <p class="lead font-weight-bold">Rp {{ number_format($donation->amount, 0, ',', '.') }}</p>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <h5>Jumlah Donasi</h5>
-                        <p>Rp {{ number_format($donation->amount, 0, ',', '.') }}</p>
-                    </div>
-
-                    <div class="mb-3">
-                        <h5>Status</h5>
-                        <p><span class="badge bg-{{ $donation->status == 'completed' ? 'success' : 'warning' }}">
-                            {{ $donation->status }}
-                        </span></p>
-                    </div>
-
-                    <div class="mb-3">
-                        <h5>Tanggal</h5>
-                        <td>{{ $donation->created_at ? $donation->created_at->format('d M Y H:i') : 'N/A' }}</td>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 class="text-muted">Status</h5>
+                            <span class="badge rounded-pill bg-{{ $donation->status == 'berhasil' ? 'success' : 'warning' }} px-3 py-2">
+                                {{ ucfirst($donation->status) }}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-muted">Tanggal Donasi</h5>
+                            <p>{{ $donation->created_at ? $donation->created_at->format('d M Y H:i') : 'N/A' }}</p>
+                        </div>
                     </div>
 
                     @if($donation->note)
-                    <div class="mb-3">
-                        <h5>Pesan</h5>
-                        <p>{{ $donation->note }}</p>
+                    <div class="mb-4">
+                        <h5 class="text-muted">Pesan</h5>
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <i class="fas fa-quote-left text-muted mr-2"></i>
+                                {{ $donation->note }}
+                                <i class="fas fa-quote-right text-muted ml-2"></i>
+                            </div>
+                        </div>
                     </div>
                     @endif
 
-                    <a href="{{ route('donations.index') }}" class="btn btn-secondary">Kembali</a>
+                    <div class="text-center mt-4">
+                        <a href="{{ route('donations.index') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left mr-2"></i> Kembali ke Riwayat Donasi
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('styles')
+<style>
+    .badge {
+        font-size: 1rem;
+    }
+    .lead {
+        font-size: 1.1rem;
+    }
+</style>
+@endpush

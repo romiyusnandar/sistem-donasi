@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('image');
             $table->decimal('target_amount', 15, 2);
             $table->decimal('collected_amount', 15, 2)->default(0);
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->enum('status', ['aktif', 'tidak_aktif'])->default('aktif');
             $table->unsignedBigInteger('created_by');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

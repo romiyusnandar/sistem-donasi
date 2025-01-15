@@ -38,19 +38,6 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
-    <div class="nav-item">
-      <a class="nav-link" href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-        <i class="fas fa-fw fa-sign-out-alt"></i>
-        <span>Logout</span>
-      </a>
-      <form id="logout-form" action="{{route('logout')}}" method="POST" style="display: none;">
-        @csrf
-      </form>
-    </div>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -86,7 +73,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="role">Role</label>
+                                    <label for="role">Peran</label>
                                     <select class="form-control" id="role" name="role">
                                         <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
                                         <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
@@ -96,12 +83,15 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="gambar">Gambar Profil</label>
-                            <div class="d-flex align-items-center mb-2">
-                                <img src="{{ asset('picture/accounts/') }}/{{ $user->gambar }}" alt="Profile Image"
-                                    class="rounded-circle mr-3" style="width: 60px; height: 60px; object-fit: cover;">
-                                <input class="form-control-file" type="file" id="gambar" name="gambar">
-                            </div>
+                          <label for="gambar">Gambar Profil</label>
+                          <div class="d-flex align-items-center mb-2">
+                              <img src="{{ asset('picture/accounts/') }}/{{ $user->gambar }}" alt="Profile Image"
+                                  class="rounded-circle mr-3" style="width: 60px; height: 60px; object-fit: cover;">
+                              <div class="custom-file col-md-6">
+                                  <input type="file" class="custom-file-input" id="gambar" name="gambar">
+                                  <label class="custom-file-label" for="gambar">Pilih file</label>
+                              </div>
+                          </div>
                         </div>
 
                         <input type="hidden" name="password" value="{{ $user->password }}">
@@ -119,4 +109,18 @@
             </div>
         </div>
     </div>
+
+    <script>
+      document.querySelector('.custom-file-input').addEventListener('change',function(e){
+          var fileName = e.target.files[0].name;
+          var nextSibling = e.target.nextElementSibling
+          nextSibling.innerText = fileName
+      })
+  </script>
+
+  <style>
+      .custom-file-label::after {
+          content: "Pilih";
+      }
+  </style>
 @endsection

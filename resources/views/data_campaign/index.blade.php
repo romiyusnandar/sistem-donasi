@@ -53,7 +53,7 @@
 
       <div class="mb-3">
         <a href="{{route('datacampaign.create')}}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Tambah Campaign
+            <i class="fas fa-plus"></i> Tambah Kampaye
         </a>
     </div>
 
@@ -72,41 +72,57 @@
                         });
                     </script>
                 @endif
+                <div class="mb-3">
+                  <input type="text" id="searchInput" class="form-control" placeholder="Cari kampanye...">
+                </div>
                   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                       <thead>
                           <tr>
-                              <th>Id</th>
-                              <th>Image</th>
-                              <th>Title</th>
-                              <th>Description</th>
+                              <th>No</th>
+                              <th>Gambar</th>
+                              <th>Judul</th>
+                              <th>Deskripsi</th>
                               <th>Target</th>
-                              <th>Collected</th>
+                              <th>Didapatkan</th>
                               <th>Status</th>
-                              <th>Action</th>
+                              <th>Aksi</th>
                           </tr>
                       </thead>
                       <tbody>
-                        @foreach ($campaigns as $item)
-                            <tr>
-                              <td>{{$item->id}}</td>
+                      @foreach ($campaigns as $item)
+                          <tr>
+                              <td>{{ $loop->iteration }}</td>
                               <td>
-                                <img src="{{ asset('picture/campaign/' . $item->image) }}" alt="Campaign Image" width="100">
+                                  <img src="{{ asset('picture/campaign/' . $item->image) }}" alt="Campaign Image" width="100">
                               </td>
                               <td>{{$item->title}}</td>
                               <td>{{$item->description}}</td>
                               <td>{{$item->target_amount}}</td>
                               <td>{{ $item->collected_amount }}</td>
                               <td>{{$item->status}}</td>
-                              <td><a href="/datacampaign/update/{{$item->id}}" class="btn btn-sm btn-warning text-decoration-none">Edit</a>
-                                <form action="/datacampaign/delete/{{$item->id}}" method="POST" class="d-inline" onsubmit="return confirmHapus(event)">
-                                  @csrf
-                                  <button class="btn btn-sm btn-danger" type="submit">Hapus</button>
-                                </form>
+                              <td>
+                                  <div class="d-flex flex-column">
+                                      <a href="{{ route('datacampaign.show', $item->id) }}" class="btn btn-sm btn-info text-decoration-none mb-1">
+                                          <i class="fas fa-eye"></i> Lihat
+                                      </a>
+                                      <a href="/datacampaign/update/{{$item->id}}" class="btn btn-sm btn-warning text-decoration-none mb-1">
+                                          <i class="fas fa-edit"></i> Edit
+                                      </a>
+                                      <form action="/datacampaign/delete/{{$item->id}}" method="POST" onsubmit="return confirmHapus(event)">
+                                          @csrf
+                                          <button class="btn btn-sm btn-danger w-100" type="submit">
+                                              <i class="fas fa-trash-alt"></i> Hapus
+                                          </button>
+                                      </form>
+                                  </div>
                               </td>
-                            </tr>
-                        @endforeach
+                          </tr>
+                      @endforeach
                       </tbody>
                   </table>
+                  <div id="noResultsMessage" style="display: none;" class="text-center mt-3">
+                    <p>Tidak ada hasil yang ditemukan.</p>
+                  </div>
               </div>
           </div>
       </div>
@@ -131,8 +147,50 @@
             if (willDelete.isConfirmed) {
                 event.target.submit(); // Melanjutkan pengiriman form
             } else {
-                swal('Your imaginary file is safe!');
+                swal('Berkas imajiner Anda aman!');
             }
         });
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const table = document.getElementById('dataTable');
+        const rows = table.getElementsByTagName('tr');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+
+        searchInput.addEventListener('keyup', function() {
+            const searchTerm = searchInput.value.toLowerCase();
+            let visibleRowCount = 0;
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td');
+                let found = false;
+
+                for (let j = 0; j < cells.length; j++) {
+                    const cellText = cells[j].textContent.toLowerCase();
+                    if (cellText.includes(searchTerm)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found) {
+                    row.style.display = '';
+                    visibleRowCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+
+            // Tampilkan atau sembunyikan pesan "tidak ada hasil"
+            if (visibleRowCount === 0) {
+                noResultsMessage.style.display = 'block';
+                table.style.display = 'none';
+            } else {
+                noResultsMessage.style.display = 'none';
+                table.style.display = '';
+            }
+        });
+    });
 </script>

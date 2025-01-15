@@ -48,7 +48,7 @@
 <div class="col-12 grid-margin stretch-card">
   <div class="card shadow">
       <div class="card-body">
-          <h4 class="card-title mb-4">Tambah Campaign</h4>
+          <h4 class="card-title mb-4">Tambah Kampanye</h4>
 
           <!-- Menampilkan error jika ada -->
           @if ($errors->any())
@@ -65,41 +65,45 @@
           <form class="forms-sample" method="POST" action="{{ route('datacampaign.submit') }}" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
-                <label for="title">Judul Campaign</label>
-                <input type="text" class="form-control" id="title" placeholder="Judul Campaign"
+                <label for="title">Judul Kampanye</label>
+                <input type="text" class="form-control" id="title"
                     name="title" value="{{ old('title') }}" required>
             </div>
 
             <div class="form-group">
                 <label for="description">Deskripsi</label>
                 <textarea class="form-control" id="description" rows="4"
-                    placeholder="Deskripsikan tujuan campaign..." name="description" required>{{ old('description') }}</textarea>
+                    name="description" required>{{ old('description') }}</textarea>
             </div>
 
             <div class="form-group">
                 <label for="goal">Target Donasi (Rp)</label>
-                <input type="number" class="form-control" id="goal" placeholder="1000000"
+                <input type="number" class="form-control" id="goal"
                     name="target_amount" value="{{ old('target_amount') }}" required>
             </div>
 
             <div class="form-group">
-                <label for="status">Status Campaign</label>
+                <label for="status">Status Kampanye</label>
                 <select class="form-control" id="status" name="status" required>
                     <option value="">Pilih Status</option>
-                    <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Aktif</option>
-                    <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
+                    <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                    <option value="tidak_aktif" {{ old('status') == 'tidak_aktif' ? 'selected' : '' }}>Tidak Aktif</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="image">Gambar Campaign</label>
-                <input type="file" class="form-control-file" id="image" name="image" required>
+                <label for="image">Gambar Kampanye</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="image" name="image" required>
+                    <label class="custom-file-label" for="image">Pilih Gambar</label>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="created_by">Kampanye dibuat oleh</label>
-                <input type="number" class="form-control" id="created_by"
-                       name="created_by" value="{{ auth()->user()->id }}" readonly>
+                <input type="text" class="form-control" id="created_by_name"
+                      name="created_by_name" value="{{ auth()->user()->fullname }}" readonly>
+                <input type="hidden" name="created_by" value="{{ auth()->user()->id }}">
             </div>
 
             <button type="submit" class="btn btn-primary me-2">Tambah</button>
@@ -110,4 +114,11 @@
   </div>
 </div>
 
+<script>
+  document.querySelector('.custom-file-input').addEventListener('change', function(e) {
+      var fileName = e.target.files[0].name;
+      var nextSibling = e.target.nextElementSibling;
+      nextSibling.innerText = fileName || 'Pilih Gambar';
+  });
+  </script>
 @endsection

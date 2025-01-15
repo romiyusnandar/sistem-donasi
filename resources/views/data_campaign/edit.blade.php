@@ -48,7 +48,7 @@
 <div class="col-12 grid-margin stretch-card">
   <div class="card shadow">
       <div class="card-body">
-          <h4 class="card-title mb-4">Edit Campaign</h4>
+          <h4 class="card-title mb-4">Edit Kampanye</h4>
 
           <!-- Menampilkan error jika ada -->
           @if ($errors->any())
@@ -66,15 +66,15 @@
             @csrf
 
             <div class="form-group">
-                <label for="title">Judul Campaign</label>
-                <input type="text" class="form-control" id="title" placeholder="Judul Campaign"
+                <label for="title">Judul Kampanye</label>
+                <input type="text" class="form-control" id="title"
                     name="title" value="{{ old('title', $campaign->title) }}" required>
             </div>
 
             <div class="form-group">
                 <label for="description">Deskripsi</label>
                 <textarea class="form-control" id="description" rows="4"
-                    placeholder="Deskripsikan tujuan campaign..." name="description" required>{{ old('description', $campaign->description) }}</textarea>
+                    name="description" required>{{ old('description', $campaign->description) }}</textarea>
             </div>
 
             <div class="form-group">
@@ -84,29 +84,41 @@
             </div>
 
             <div class="form-group">
-                <label for="status">Status Campaign</label>
+                <label for="status">Status Kampanye</label>
                 <select class="form-control" id="status" name="status" required>
-                    <option value="active" {{ old('status', $campaign->status) == 'active' ? 'selected' : '' }}>Aktif</option>
-                    <option value="inactive" {{ old('status', $campaign->status) == 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
+                    <option value="aktif" {{ old('status', $campaign->status) == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                    <option value="tidak_aktif" {{ old('status', $campaign->status) == 'tidak_aktif' ? 'selected' : '' }}>Tidak Aktif</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="image">Gambar Campaign</label>
-                <input type="file" class="form-control-file" id="image" name="image">
-                <small class="form-text text-muted">Biarkan kosong jika tidak ingin mengganti gambar.</small>
-            </div>
+              <label for="image">Gambar Kampanye</label>
+              <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="image" name="image">
+                  <label class="custom-file-label" for="image">Pilih Gambar</label>
+                  <small class="form-text text-muted">Biarkan kosong jika tidak ingin mengganti gambar.</small>
+              </div>
+          </div>
 
             <div class="form-group">
-                <label for="created_by">Kampanye dibuat oleh</label>
-                <input type="number" class="form-control" id="created_by"
-                       name="created_by" value="{{ $campaign->created_by }}" readonly>
-            </div>
+              <label for="created_by">Kampanye dibuat oleh</label>
+              <input type="text" class="form-control" id="created_by_name"
+                    name="created_by_name" value="{{ auth()->user()->fullname }}" readonly>
+              <input type="hidden" name="created_by" value="{{ auth()->user()->id }}">
+          </div>
 
-            <button type="submit" class="btn btn-primary me-2">Simpan</button>
+            <button type="submit" class="btn btn-primary me-2">Simpan Perubahan</button>
             <a href="{{ route('datacampaign') }}" class="btn btn-light">Kembali</a>
         </form>
       </div>
   </div>
 </div>
+
+<script>
+  document.querySelector('.custom-file-input').addEventListener('change', function(e) {
+      var fileName = e.target.files[0].name;
+      var nextSibling = e.target.nextElementSibling;
+      nextSibling.innerText = fileName || 'Pilih Gambar';
+  });
+  </script>
 @endsection

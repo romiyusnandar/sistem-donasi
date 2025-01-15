@@ -45,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/datacampaign/update/{id}', [DataCampaign::class, 'edit'])->name('datacampaign.edit');
     Route::post('/datacampaign/update/{id}', [DataCampaign::class, 'update'])->name('datacampaign.update');
     Route::post('/datacampaign/delete/{id}', [DataCampaign::class, 'delete'])->name('datacampaign.delete');
+    Route::get('/datacampaign/show/{id}', [DataCampaign::class, 'show'])->name('datacampaign.show');
 
     // Donation routes for users
     Route::middleware(['userAkses:user'])->group(function () {

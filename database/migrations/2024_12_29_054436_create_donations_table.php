@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('campaign_id');
             $table->decimal('amount', 15, 2);
             $table->string('note')->nullable();
-            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
+            $table->enum('status', ['ditunda', 'berhasil', 'gagal'])->default('ditunda');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('campaign_id')->references('id')->on('campaigns')->onDelete('cascade');
             $table->timestamps();

@@ -65,21 +65,24 @@
                         });
                     </script>
                 @endif
+                <div class="mb-3">
+                  <input type="text" id="searchInput" class="form-control" placeholder="Cari user...">
+                </div>
                   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                       <thead>
                           <tr>
-                              <th>Id</th>
-                              <th>Name</th>
+                              <th>No</th>
+                              <th>Nama</th>
                               <th>Email</th>
-                              <th>Role</th>
-                              <th>Updated</th>
-                              <th>Action</th>
+                              <th>Peran</th>
+                              <th>Diperbarui Pada</th>
+                              <th>Aksi</th>
                           </tr>
                       </thead>
                       <tbody>
                         @foreach ($users as $item)
                             <tr>
-                              <td>{{$item->id}}</td>
+                              <td>{{ $loop->iteration }}</td>
                               <td>{{$item->fullname}}</td>
                               <td>{{$item->email}}</td>
                               <td>{{$item->role}}</td>
@@ -94,6 +97,9 @@
                         @endforeach
                       </tbody>
                   </table>
+                  <div id="noResultsMessage" style="display: none;" class="text-center mt-3">
+                    <p>Tidak ada hasil yang ditemukan.</p>
+                  </div>
               </div>
           </div>
       </div>
@@ -122,4 +128,46 @@
             }
         });
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const table = document.getElementById('dataTable');
+        const rows = table.getElementsByTagName('tr');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+
+        searchInput.addEventListener('keyup', function() {
+            const searchTerm = searchInput.value.toLowerCase();
+            let visibleRowCount = 0;
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td');
+                let found = false;
+
+                for (let j = 0; j < cells.length; j++) {
+                    const cellText = cells[j].textContent.toLowerCase();
+                    if (cellText.includes(searchTerm)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found) {
+                    row.style.display = '';
+                    visibleRowCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+
+            // Tampilkan atau sembunyikan pesan "tidak ada hasil"
+            if (visibleRowCount === 0) {
+                noResultsMessage.style.display = 'block';
+                table.style.display = 'none';
+            } else {
+                noResultsMessage.style.display = 'none';
+                table.style.display = '';
+            }
+        });
+    });
 </script>

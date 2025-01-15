@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CampaignModel;
+use App\Models\DonationModel;
 use Illuminate\Http\Request;
 
 class DataCampaign extends Controller
@@ -26,41 +27,51 @@ class DataCampaign extends Controller
     }
 
     function store(Request $request)
-{
-    $request->validate([
-        'title' => 'required',
-        'description' => 'required',
-        'image' => 'required|image|mimes:jpeg,png,jpg|file',
-        'target_amount' => 'required|numeric',
-        'status' => 'required|in:active,inactive',
-    ]);
+    {
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|file',
+            'target_amount' => 'required|numeric',
+            'status' => 'required|in:aktif,tidak_aktif',
+        ]);
 
-    $gambar_file = $request->file('image');
-    $gambar_ekstensi = $gambar_file->extension();
-    $nama_gambar = date('ymdhis') . '.' . $gambar_ekstensi;
-    $gambar_file->move(public_path('picture/campaign'), $nama_gambar);
+        $gambar_file = $request->file('image');
+        $gambar_ekstensi = $gambar_file->extension();
+        $nama_gambar = date('ymdhis') . '.' . $gambar_ekstensi;
+        $gambar_file->move(public_path('picture/campaign'), $nama_gambar);
 
-    $infoCampaign = [
-        'title' => $request->title,
-        'description' => $request->description,
-        'image' => $nama_gambar,
-        'target_amount' => $request->target_amount,
-        'collected_amount' => 0,
-        'status' => $request->status,
-        'created_by' => auth()->user()->id,
-    ];
+        $infoCampaign = [
+            'title' => $request->title,
+            'description' => $request->description,
+            'image' => $nama_gambar,
+            'target_amount' => $request->target_amount,
+            'collected_amount' => 0,
+            'status' => $request->status,
+            'created_by' => auth()->user()->id,
+        ];
 
-    CampaignModel::create($infoCampaign);
+        CampaignModel::create($infoCampaign);
 
-    return redirect()->route('datacampaign')->with('success', 'Data campaign berhasil ditambahkan');
-}
+        return redirect()->route('datacampaign')->with('success', 'Data kampanye berhasil ditambahkan');
+    }
+
+  public function show($id)
+  {
+      $campaign = CampaignModel::findOrFail($id);
+      $donations = DonationModel::with('user')
+      ->orderBy('created_at', 'DESC')
+      ->get();
+
+      return view('data_campaign.show', compact('campaign', 'donations'));
+  }
 
 
     function edit($id)
     {
       $campaign = CampaignModel::find($id);
       if (!$campaign) {
-          return redirect()->route('datacampaign')->withErrors(['Campaign tidak ditemukan.']);
+          return redirect()->route('datacampaign')->withErrors(['Kampanye tidak ditemukan.']);
       }
 
       return view('data_campaign.edit', ['campaign' => $campaign]);
@@ -74,8 +85,8 @@ class DataCampaign extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'target_amount' => 'required|numeric',
-            'status' => 'required|in:active,inactive',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'required|in:aktif,tidak_aktif',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         $campaign->title = $request->title;
@@ -92,13 +103,13 @@ class DataCampaign extends Controller
 
         $campaign->save();
 
-        return redirect()->route('datacampaign')->with('success', 'Campaign berhasil diperbarui.');
+        return redirect()->route('datacampaign')->with('success', 'Kampanye berhasil diperbarui.');
     }
 
 
     function delete(Request $request)
     {
       CampaignModel::where('id', $request->id)->delete();
-      return redirect()->route('datacampaign')->with('success', 'Data campaign berhasil dihapus');
+      return redirect()->route('datacampaign')->with('success', 'Data kampanye berhasil dihapus');
     }
 }
