@@ -11,8 +11,11 @@ use Illuminate\Support\Facades\Route;
 
 // Public routes
 Route::get('/', function () {
-    return redirect()->route('login');
+    return redirect()->route('home');
 })->name('root');
+
+Route::get('/home', [UserController::class, 'index'])->name('home');
+Route::get('/about', [AboutController::class, 'index'])->name('about');
 
 // Authentication routes
 Route::middleware(['guest'])->group(function () {
@@ -25,12 +28,8 @@ Route::middleware(['guest'])->group(function () {
 
 // Authenticated routes
 Route::middleware(['auth'])->group(function () {
-    // User route (accessible for authenticated users)
-    Route::get('/home', [UserController::class, 'index'])->name('home')->middleware('userAkses:user');
     // Admin route
     Route::get('/admin', [AdminController::class, 'index'])->name('admin')->middleware('userAkses:admin');
-
-    Route::get('/tentang-kami', [AboutController::class, 'index'])->name('about');
 
     // user management routes
     Route::get('/datauser', [DataUser::class, 'index'])->name('datauser');
@@ -47,16 +46,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/datacampaign/delete/{id}', [DataCampaign::class, 'delete'])->name('datacampaign.delete');
     Route::get('/datacampaign/show/{id}', [DataCampaign::class, 'show'])->name('datacampaign.show');
 
-    // Donation routes for users
-    Route::middleware(['userAkses:user'])->group(function () {
-        Route::get('/donations', [DonationController::class, 'index'])->name('donations.index');
-        Route::get('/donations/create/{campaign_id}', [DonationController::class, 'create'])->name('donations.create');
-        Route::post('/donations/store/{campaign_id}', [DonationController::class, 'store'])->name('donations.store');
-        Route::get('/donations/{id}', [DonationController::class, 'show'])->name('donations.show');
-    });
-
-    // About route
-    Route::get('/about', [AboutController::class, 'index'])->name('about');
+    // Donation routes for authenticated users
+    Route::get('/donations', [DonationController::class, 'index'])->name('donations.index');
+    Route::get('/donations/create/{campaign_id}', [DonationController::class, 'create'])->name('donations.create');
+    Route::post('/donations/store/{campaign_id}', [DonationController::class, 'store'])->name('donations.store');
+    Route::get('/donations/{id}', [DonationController::class, 'show'])->name('donations.show');
 });
 
 // Logout route (accessible for authenticated users)
