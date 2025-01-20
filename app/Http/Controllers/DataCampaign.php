@@ -56,15 +56,11 @@ class DataCampaign extends Controller
         return redirect()->route('datacampaign')->with('success', 'Data kampanye berhasil ditambahkan');
     }
 
-  public function show($id)
-  {
-      $campaign = CampaignModel::findOrFail($id);
-      $donations = DonationModel::with('user')
-      ->orderBy('created_at', 'DESC')
-      ->get();
-
-      return view('data_campaign.show', compact('campaign', 'donations'));
-  }
+    public function show($id)
+    {
+        $campaign = CampaignModel::with('donations.user')->findOrFail($id);
+        return view('data_campaign.show', compact('campaign'));
+    }
 
 
     function edit($id)

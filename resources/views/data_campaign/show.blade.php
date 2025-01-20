@@ -64,14 +64,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($donations as $donation)
+                        @forelse ($campaign->donations as $donation)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $donation->user ? $donation->user->fullname : 'Anonymous' }}</td>
                             <td>Rp {{ number_format($donation->amount, 0, ',', '.') }}</td>
                             <td>{{ $donation->created_at->format('d M Y H:i') }}</td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="4" class="text-center">Belum ada donasi untuk kampanye ini.</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
